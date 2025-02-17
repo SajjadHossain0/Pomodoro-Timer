@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pomodoro Timer</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #493D9E, #B2A5FF);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .timer {
+      font-size: 3rem;
+      margin: 20px 0;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .buttons button {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background 0.3s ease, transform 0.2s ease;
+      flex: 1 1 auto;
+    }
+
+    .buttons button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .controls button {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .controls button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .todo-list {
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .todo-list input[type="text"] {
+      width: calc(100% - 90px);
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 25px;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      outline: none;
+    }
+
+    .todo-list input[type="text"]::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .todo-list button {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-left: 10px;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .todo-list button:hover {
+      background: #45a049;
+      transform: translateY(-2px);
+    }
+
+    .task-list-container {
+      max-height: 200px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+      margin-top: 10px;
+    }
+
+    /* Custom scrollbar for Webkit browsers (Chrome, Safari) */
+    .task-list-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .task-list-container::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+    }
+
+    .task-list-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .todo-list ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .todo-list li {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.3s ease;
+    }
+
+    .todo-list li:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .todo-list li.completed span {
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    .todo-list input[type="checkbox"] {
+      margin-right: 15px;
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+    }
+
+    .todo-list .task-title {
+      flex: 1;
+      font-size: 1.2rem;
+      margin-right: 15px;
+    }
+
+    .todo-list .task-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .todo-list .task-actions button {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: color 0.3s ease;
+    }
+
+    .todo-list .task-actions button:hover {
+      color: #fff;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .timer {
+        font-size: 2.5rem;
+      }
+
+      .buttons button {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+      }
+
+      .controls button {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+      }
+
+      .todo-list input[type="text"] {
+        width: calc(100% - 80px);
+        font-size: 0.9rem;
+      }
+
+      .todo-list button {
+        padding: 8px;
+        font-size: 0.9rem;
+      }
+
+      .todo-list .task-title {
+        font-size: 1rem;
+      }
+
+      .todo-list .task-actions button {
+        font-size: 1rem;
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>Pomodoro Timer</h1>
+    <div class="timer" id="timer">25:00</div>
+    <div class="controls">
+      <button id="reset" title="Reset">↺</button>
+      <button id="play" title="Play">▶</button>
+      <button id="pause" title="Pause">⏸</button>
+    </div>
+    <div class="buttons">
+      <button id="pomodoro">Pomodoro</button>
+      <button id="shortBreak">Short Break</button>
+      <button id="longBreak">Long Break</button>
+    </div>
+    
+    <div class="todo-list">
+      <input type="text" id="taskInput" placeholder="Add a new task">
+      <button id="addTask">Add</button>
+      <div class="task-list-container">
+        <ul id="taskList"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let timer;
+    let timeLeft = 1500; // 25 minutes in seconds
+    let isRunning = false;
+    let currentTimer = 'pomodoro';
+
+    const timerDisplay = document.getElementById('timer');
+    const pomodoroBtn = document.getElementById('pomodoro');
+    const shortBreakBtn = document.getElementById('shortBreak');
+    const longBreakBtn = document.getElementById('longBreak');
+    const resetBtn = document.getElementById('reset');
+    const pauseBtn = document.getElementById('pause');
+    const playBtn = document.getElementById('play');
+    const taskInput = document.getElementById('taskInput');
+    const addTaskBtn = document.getElementById('addTask');
+    const taskList = document.getElementById('taskList');
+
+    function updateTimer() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function startTimer(duration, timerType) {
+      if (isRunning && currentTimer === timerType) return;
+      clearInterval(timer);
+      timeLeft = duration;
+      isRunning = true;
+      currentTimer = timerType;
+      timer = setInterval(() => {
+        timeLeft--;
+        updateTimer();
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          isRunning = false;
+          alert('Time is up!');
+        }
+      }, 1000);
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      isRunning = false;
+      if (currentTimer === 'pomodoro') {
+        timeLeft = 1500;
+      } else if (currentTimer === 'shortBreak') {
+        timeLeft = 300;
+      } else if (currentTimer === 'longBreak') {
+        timeLeft = 900;
+      }
+      updateTimer();
+    }
+
+    function pauseTimer() {
+      clearInterval(timer);
+      isRunning = false;
+    }
+
+    function resumeTimer() {
+      if (!isRunning) {
+        isRunning = true;
+        timer = setInterval(() => {
+          timeLeft--;
+          updateTimer();
+          if (timeLeft <= 0) {
+            clearInterval(timer);
+            isRunning = false;
+            alert('Time is up!');
+          }
+        }, 1000);
+      }
+    }
+
+    pomodoroBtn.addEventListener('click', () => startTimer(1500, 'pomodoro'));
+    shortBreakBtn.addEventListener('click', () => startTimer(300, 'shortBreak'));
+    longBreakBtn.addEventListener('click', () => startTimer(900, 'longBreak'));
+    resetBtn.addEventListener('click', resetTimer);
+    pauseBtn.addEventListener('click', pauseTimer);
+    playBtn.addEventListener('click', resumeTimer);
+
+    addTaskBtn.addEventListener('click', () => {
+      const taskText = taskInput.value.trim();
+      if (taskText !== '') {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <input type="checkbox" onchange="toggleTaskCompletion(this)">
+          <span class="task-title">${taskText}</span>
+          <div class="task-actions">
+            <button onclick="editTask(this)"><i class="fas fa-edit"></i></button>
+            <button onclick="deleteTask(this)"><i class="fas fa-trash"></i></button>
+          </div>
+        `;
+        taskList.appendChild(li);
+        taskInput.value = '';
+      }
+    });
+
+    function toggleTaskCompletion(checkbox) {
+      const taskTitle = checkbox.nextElementSibling;
+      taskTitle.classList.toggle('completed');
+    }
+
+    function editTask(button) {
+      const taskTitle = button.closest('li').querySelector('.task-title');
+      const newTitle = prompt('Edit your task:', taskTitle.textContent);
+      if (newTitle !== null && newTitle.trim() !== '') {
+        taskTitle.textContent = newTitle.trim();
+      }
+    }
+
+    function deleteTask(button) {
+      const li = button.closest('li');
+      li.remove();
+    }
+  </script>
+</body>
+</html>
