@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pomodoro Timer</title>
+
   <style>
     /* General Styles */
     body {
@@ -32,7 +33,7 @@
     h1 {
       margin-bottom: 20px;
       font-size: 2rem;
-      font-weight: 600;
+      font-weight: bold;
       color: #fff;
     }
 
@@ -90,6 +91,7 @@
       justify-content: center;
       transition: background 0.3s ease, transform 0.2s ease;
     }
+
 
     .controls button:hover {
       background: rgba(255, 255, 255, 0.3);
@@ -251,12 +253,184 @@
         font-size: 1rem;
       }
     }
+
+    .about button {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    /* Modal Styles */
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal Content */
+.modal-content {
+  background: #fff;
+  color: black;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 500px;
+  max-height: 80vh; /* Limits height */
+  overflow: hidden;
+  text-align: left;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollable content inside modal */
+.modal-body {
+  overflow-y: auto;
+  max-height: 70vh; /* Makes only content scrollable */
+  padding-right: 10px;
+}
+
+/* Close Button */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+
   </style>
+
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 </head>
+
 <body>
   <div class="container">
+    <div align="right" class="about">
+      <button>?</button>
+<!-- Modal -->
+<div id="userManualModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>User Manual</h2>
+    <div class="modal-body">
+      <h3>1. Introduction</h3>
+      <p>The Pomodoro Timer is a productivity tool designed to help users manage their time efficiently using the Pomodoro Technique...</p>
+
+      <h3>2. What is the Pomodoro Technique?</h3>
+      <p>The Pomodoro Technique is a time management method that breaks work into intervals...</p>
+      <ul>
+        <li><strong>Pomodoro Session:</strong> 25 minutes of focused work</li>
+        <li><strong>Short Break:</strong> 5 minutes of relaxation after each Pomodoro</li>
+        <li><strong>Long Break:</strong> 15 minutes of rest after four Pomodoro sessions</li>
+      </ul>
+
+      <h3>3. How the Pomodoro Timer Works</h3>
+      <p>The Pomodoro Timer application provides a simple and effective way to implement this technique.</p>
+      <ul>
+        <li>Start, Pause, and Reset timer functionalities</li>
+        <li>Switch between Pomodoro, Short Break, and Long Break</li>
+        <li>Task management with the built-in To-Do List</li>
+      </ul>
+
+      <h3>4. Getting Started</h3>
+      <p>When you open the Pomodoro Timer, you will see:</p>
+      <ul>
+        <li>A timer display showing the remaining time</li>
+        <li>Control buttons to start, pause, and reset the timer</li>
+        <li>Session selection buttons for Pomodoro, Short Break, and Long Break</li>
+        <li>A To-Do List to manage your tasks</li>
+      </ul>
+
+      <h3>5. How to Use the Timer</h3>
+      <p><strong>Starting a Pomodoro Session:</strong></p>
+      <ul>
+        <li>Click the Pomodoro button to set the timer to 25 minutes.</li>
+        <li>Press the Play (▶) button to start the countdown.</li>
+        <li>When the time is up, an alert will notify you to take a break.</li>
+      </ul>
+
+      <p><strong>Taking a Break:</strong></p>
+      <ul>
+        <li>Short Break (5 minutes) after one Pomodoro session</li>
+        <li>Long Break (15 minutes) after four Pomodoro sessions</li>
+        <li>Click Play to start the break timer.</li>
+      </ul>
+
+      <p><strong>Pausing and Resuming the Timer:</strong></p>
+      <ul>
+        <li>Click the Pause (⏸) button to stop the countdown temporarily.</li>
+        <li>Click the Play (▶) button to resume from where you left off.</li>
+      </ul>
+
+      <p><strong>Resetting the Timer:</strong></p>
+      <ul>
+        <li>Click the Reset (↺) button to stop and reset the timer.</li>
+      </ul>
+
+      <h3>6. Using the To-Do List</h3>
+      <p><strong>Adding a Task:</strong></p>
+      <ul>
+        <li>Enter your task in the input field.</li>
+        <li>Click the Add button to add the task to the list.</li>
+      </ul>
+
+      <p><strong>Marking a Task as Completed:</strong></p>
+      <ul>
+        <li>Check the box next to a task to mark it as completed.</li>
+      </ul>
+
+      <p><strong>Editing a Task:</strong></p>
+      <ul>
+        <li>Click the Edit (✏️) button next to a task.</li>
+        <li>Modify the task description in the prompt and save it.</li>
+      </ul>
+
+      <p><strong>Deleting a Task:</strong></p>
+      <ul>
+        <li>Click the Trash (🗑) button to remove a task from the list.</li>
+      </ul>
+
+      <h3>7. Tips for Effective Pomodoro Sessions</h3>
+      <ul>
+        <li>Work on a single task during each Pomodoro session.</li>
+        <li>Keep distractions away and stay focused until the timer ends.</li>
+        <li>Take breaks seriously to refresh your mind and stay productive.</li>
+        <li>Use the To-Do List to plan your Pomodoros in advance.</li>
+      </ul>
+
+      <h3>8. Conclusion</h3>
+      <p>This Pomodoro Timer Application is a great tool for improving productivity and managing tasks efficiently...</p>
+
+      <h3>9. Developer Details</h3>
+<p><strong>Developed by:</strong> Md. Sajjad Hossain</p>
+<p><strong>Contact:</strong> sajjad.tech.eng@gmail.com</p>
+<p><strong>Portfolio:</strong> <a href="https://sajjadhossain.onrender.com/" target="_blank">Md. Sajjad Hossain</a></p>
+
+    
+    </div>
+  </div>
+</div>
+
+    </div>
     <h1>Pomodoro Timer</h1>
     <div class="timer" id="timer">25:00</div>
     <div class="controls">
@@ -284,6 +458,7 @@
     let timeLeft = 1500; // 25 minutes in seconds
     let isRunning = false;
     let currentTimer = 'pomodoro';
+    let pomodoroCount = 0;
 
     const timerDisplay = document.getElementById('timer');
     const pomodoroBtn = document.getElementById('pomodoro');
@@ -315,13 +490,28 @@
           clearInterval(timer);
           isRunning = false;
           alert('Time is up!');
+          handleNextTimer();
         }
       }, 1000);
+    }
+
+    function handleNextTimer() {
+      if (currentTimer === 'pomodoro') {
+        pomodoroCount++;
+        if (pomodoroCount % 4 === 0) {
+          startTimer(900, 'longBreak'); // 15 minutes long break
+        } else {
+          startTimer(300, 'shortBreak'); // 5 minutes short break
+        }
+      } else if (currentTimer === 'shortBreak' || currentTimer === 'longBreak') {
+        startTimer(1500, 'pomodoro'); // 25 minutes Pomodoro
+      }
     }
 
     function resetTimer() {
       clearInterval(timer);
       isRunning = false;
+      pomodoroCount = 0;
       if (currentTimer === 'pomodoro') {
         timeLeft = 1500;
       } else if (currentTimer === 'shortBreak') {
@@ -347,6 +537,7 @@
             clearInterval(timer);
             isRunning = false;
             alert('Time is up!');
+            handleNextTimer();
           }
         }, 1000);
       }
@@ -393,6 +584,27 @@
       const li = button.closest('li');
       li.remove();
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+  const modal = document.getElementById("userManualModal");
+  const aboutButton = document.querySelector(".about button");
+  const closeButton = document.querySelector(".modal .close");
+
+  aboutButton.addEventListener("click", function () {
+    modal.style.display = "flex";
+  });
+
+  closeButton.addEventListener("click", function () {
+    modal.style.display = "none";
+  });
+
+  window.addEventListener("click", function (event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+});
+
   </script>
 </body>
 </html>
